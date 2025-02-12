@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz - Vad, Vem, Vilken...</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        #quiz-container {
+            background: white;
+            padding: 20px;
+            max-width: 500px;
+            margin: auto;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            font-size: 22px;
+        }
+        .question {
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .option {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            background: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .option:hover {
+            background: #0056b3;
+        }
+        #result {
+            font-size: 18px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="quiz-container">
+        <h1>Quiz - Vad, Vem, Vilken...</h1>
+        <div id="question-container">
+            <p class="question" id="question-text"></p>
+            <button class="option" onclick="checkAnswer(1)" id="opt1"></button>
+            <button class="option" onclick="checkAnswer(2)" id="opt2"></button>
+            <button class="option" onclick="checkAnswer(3)" id="opt3"></button>
+            <button class="option" onclick="checkAnswer(4)" id="opt4"></button>
+            <button class="option" onclick="checkAnswer(5)" id="opt5"></button>
+        </div>
+        <p id="result"></p>
+        <button id="next-btn" onclick="nextQuestion()" style="display:none;">Următoarea întrebare</button>
+    </div>
+
+    <script>
+        const questionTemplates = [
+            ["__ är ditt favoritämne?", [1, 2, 3, 4, 5], 1],
+            ["__ person vill du bjuda på middag?", [1, 2, 3, 4, 5], 2],
+            ["__ färg gillar du mest?", [1, 2, 3, 4, 5], 3],
+            ["__ språk talar du hemma?", [1, 2, 3, 4, 5], 4],
+            ["__ böcker har du läst i år?", [1, 2, 3, 4, 5], 5],
+            ["__ film såg du senast?", [1, 2, 3, 4, 5], 3],
+            ["__ tid slutar skolan?", [1, 2, 3, 4, 5], 1],
+            ["__ djur tycker du om?", [1, 2, 3, 4, 5], 5],
+            ["__ stad vill du besöka?", [1, 2, 3, 4, 5], 3],
+            ["__ dag är det idag?", [1, 2, 3, 4, 5], 3]
+        ];
+
+        const answerOptions = ["Vad", "Vem", "Vilken", "Vilket", "Vilka"];
+        let score = 0;
+
+        function getRandomQuestion() {
+            let index = Math.floor(Math.random() * questionTemplates.length);
+            let q = questionTemplates[index];
+            return { question: q[0], correct: q[2] };
+        }
+
+        function loadQuestion() {
+            document.getElementById("result").innerText = "";
+            document.getElementById("next-btn").style.display = "none";
+
+            let newQuestion = getRandomQuestion();
+            document.getElementById("question-text").innerText = newQuestion.question;
+            for (let i = 1; i <= 5; i++) {
+                document.getElementById("opt" + i).innerText = answerOptions[i - 1];
+            }
+            document.getElementById("question-text").dataset.correct = newQuestion.correct;
+        }
+
+        function checkAnswer(option) {
+            let correctAnswer = document.getElementById("question-text").dataset.correct;
+            if (option == correctAnswer) {
+                score++;
+                document.getElementById("result").innerText = "Corect!";
+                document.getElementById("result").style.color = "green";
+            } else {
+                document.getElementById("result").innerText = "Greșit! Răspunsul corect este: " + answerOptions[correctAnswer - 1];
+                document.getElementById("result").style.color = "red";
+            }
+            document.getElementById("next-btn").style.display = "block";
+        }
+
+        function nextQuestion() {
+            loadQuestion();
+        }
+
+        loadQuestion();
+    </script>
+
+</body>
+</html>
